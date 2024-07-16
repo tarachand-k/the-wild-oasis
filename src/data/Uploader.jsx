@@ -1,9 +1,11 @@
-import { useState } from "react";
 import { isFuture, isPast, isToday } from "date-fns";
+import { useState } from "react";
 import supabase from "../services/supabase";
 import Button from "../ui/Button";
 import { subtractDates } from "../utils/helpers";
 
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 import { bookings } from "./data-bookings";
 import { cabins } from "./data-cabins";
 import { guests } from "./data-guests";
@@ -102,6 +104,7 @@ async function createBookings() {
 
 function Uploader() {
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   async function uploadAll() {
     setIsLoading(true);
@@ -116,39 +119,40 @@ function Uploader() {
     await createBookings();
 
     setIsLoading(false);
+    navigate(0);
   }
 
-  async function uploadBookings() {
-    setIsLoading(true);
-    await deleteBookings();
-    await createBookings();
-    setIsLoading(false);
-  }
+  // async function uploadBookings() {
+  //   setIsLoading(true);
+  //   await deleteBookings();
+  //   await createBookings();
+  //   setIsLoading(false);
+  // }
 
   return (
-    <div
-      style={{
-        marginTop: "auto",
-        backgroundColor: "#e0e7ff",
-        padding: "8px",
-        borderRadius: "5px",
-        textAlign: "center",
-        display: "flex",
-        flexDirection: "column",
-        gap: "8px",
-      }}
-    >
+    <Wrapper>
       <h3>SAMPLE DATA</h3>
 
       <Button onClick={uploadAll} disabled={isLoading}>
-        Upload ALL
+        Upload
       </Button>
 
-      <Button onClick={uploadBookings} disabled={isLoading}>
+      {/* <Button onClick={uploadBookings} disabled={isLoading}>
         Upload bookings ONLY
-      </Button>
-    </div>
+      </Button> */}
+    </Wrapper>
   );
 }
+
+const Wrapper = styled.div`
+  margin-top: auto;
+  background-color: var(--color-grey-50);
+  padding: 12px;
+  border-radius: 5px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
 
 export default Uploader;
